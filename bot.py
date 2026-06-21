@@ -46,22 +46,26 @@ async def check_for_opportunities(context: ContextTypes.DEFAULT_TYPE):
         price = data[coin_id]['usd']
         change_24h = data[coin_id].get('usd_24h_change', 0)
 
-        # Logic for "Opportunity"
-        if abs(change_24h) > 1.5:  # Trigger on 1.5% move for more activity
+        # Trigger on 1.5% move
+        if abs(change_24h) > 1.5:
             action = "🚀 BUY" if change_24h < 0 else "📉 SELL (Short)"
             tp = price * 1.05 if change_24h < 0 else price * 0.95
             sl = price * 0.97 if change_24h < 0 else price * 1.03
             
+            # Exact format requested by Alfred
             msg = (
-                f"📊 *SIGNAL: #{symbol}*\n"
-                f"Action: {action}\n"
-                f"Entry Price: ${price:,}\n"
-                f"🎯 Take Profit: ${tp:,.4f}\n"
-                f"🛑 Stop Loss: ${sl:,.4f}\n"
-                f"⚡ 24h Change: {change_24h:.2f}%"
+                f"📊 *DAY TRADING SIGNAL: #{symbol}*\n\n"
+                f"Action: {action}\n\n"
+                f"Entry: ${price:,}\n\n"
+                f"🎯 Take Profit: ${tp:,.4f}\n\n"
+                f"🛑 Stop Loss: ${sl:,.4f}\n\n"
+                f"⚡ Volatility: {abs(change_24h):.2f}%"
             )
-            # Post directly to the channel
-            await context.bot.send_message(chat_id=CHANNEL_ID, text=msg, parse_mode='Markdown')
+            
+            try:
+                await context.bot.send_message(chat_id=CHANNEL_ID, text=msg, parse_mode='Markdown')
+            except Exception as e:
+                print(f"Error sending to channel: {e}")
 
 async def activate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Check every 5 minutes
