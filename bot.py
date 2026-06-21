@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # Replace with your token from BotFather
-TOKEN = 'YOUR_BOT_TOKEN_HERE'
+TOKEN = '8803501011:AAFVJT8aPrNE1yZnCABTz7dUFlbmIFxgAss'
 
 def get_crypto_price(coin_id='bitcoin'):
     try:
