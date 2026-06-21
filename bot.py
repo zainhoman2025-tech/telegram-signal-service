@@ -52,9 +52,9 @@ async def check_for_opportunities(context: ContextTypes.DEFAULT_TYPE):
             tp = price * 1.05 if change_24h < 0 else price * 0.95
             sl = price * 0.97 if change_24h < 0 else price * 1.03
             
-            # Exact format requested by Alfred
+            # EXACT format requested by Alfred with double line breaks
             msg = (
-                f"📊 *DAY TRADING SIGNAL: #{symbol}*\n\n"
+                f"📊 DAY TRADING SIGNAL: #{symbol}\n\n"
                 f"Action: {action}\n\n"
                 f"Entry: ${price:,}\n\n"
                 f"🎯 Take Profit: ${tp:,.4f}\n\n"
@@ -63,7 +63,8 @@ async def check_for_opportunities(context: ContextTypes.DEFAULT_TYPE):
             )
             
             try:
-                await context.bot.send_message(chat_id=CHANNEL_ID, text=msg, parse_mode='Markdown')
+                # Using plain text instead of Markdown for the headers to match Alfred's exact look
+                await context.bot.send_message(chat_id=CHANNEL_ID, text=msg)
             except Exception as e:
                 print(f"Error sending to channel: {e}")
 
